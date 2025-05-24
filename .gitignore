@@ -1,0 +1,6 @@
+# MacOS
+.DS_Store
+
+# Code
+__pycache__/
+logs/

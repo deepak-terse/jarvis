@@ -15,7 +15,7 @@ A simple Python daemon that prints "Hello, World!" every minute.
     <string>com.user.jarvis</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/bin/python3</string>
+        <string>/Users/deepak.terse/Code/jarvis/venv/bin/python</string>
         <string>/Users/deepak.terse/Code/jarvis/src/main.py</string>
     </array>
     <key>RunAtLoad</key>
