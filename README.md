@@ -68,3 +68,9 @@ If the daemon isn't running as expected:
 2. Verify the Python script path in the plist file matches your actual script location
 3. Confirm the Python interpreter path is correct (verify with `which python3`)
 4. Ensure you have write permissions to the `/tmp` directory
+
+
+## Running the app
+
+- Using `launchctl` (as mentioned above)
+- Using `python3 src/main.py`
