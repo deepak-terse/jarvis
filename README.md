@@ -1,10 +1,32 @@
 # J.A.R.V.I.S.
 
-A simple Python daemon that prints "Hello, World!" every minute.
+A voice-interactive Python assistant that listens to your commands and responds through speech.
+
+## Features
+
+- 🎤 Voice input using microphone
+- 🗣️ Speech-to-text conversion
+- 💬 Text-to-speech responses
+- 🔄 Continuous listening mode
+- 📝 Command logging
+
+## Dependencies
+
+- Python 3.x
+- SpeechRecognition
+- pyttsx3
+- PyAudio
 
 ## Setup Instructions
 
-1. Create a launchd plist file in `~/Library/LaunchAgents/com.user.jarvis.plist` with the following content:
+1. Create a virtual environment and install dependencies:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+2. Create a launchd plist file in `~/Library/LaunchAgents/com.user.jarvis.plist` with the following content:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -23,21 +45,21 @@ A simple Python daemon that prints "Hello, World!" every minute.
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>/tmp/jarvis.err</string>
+    <string>/Users/deepak.terse/Code/jarvis/logs/jarvis.err</string>
     <key>StandardOutPath</key>
-    <string>/tmp/jarvis.out</string>
+    <string>/Users/deepak.terse/Code/jarvis/logs/jarvis.out</string>
     <key>WorkingDirectory</key>
     <string>/Users/deepak.terse/Code/jarvis</string>
 </dict>
 </plist>
 ```
 
-2. Set the correct permissions for the plist file:
+3. Set the correct permissions for the plist file:
 ```bash
 chmod 644 ~/Library/LaunchAgents/com.user.jarvis.plist
 ```
 
-3. Load and start the service:
+4. Load and start the service:
 ```bash
 # Unload if previously loaded
 launchctl unload ~/Library/LaunchAgents/com.user.jarvis.plist
@@ -48,6 +70,16 @@ launchctl load ~/Library/LaunchAgents/com.user.jarvis.plist
 # Start the service
 launchctl start com.user.jarvis
 ```
+
+## Usage
+
+Once JARVIS is running, it will:
+1. Listen for voice input through your microphone
+2. Convert your speech to text
+3. Process your command
+4. Respond through text-to-speech
+
+To exit JARVIS, simply say "exit", "quit", or "stop".
 
 ## Monitoring
 
@@ -63,12 +95,13 @@ launchctl list | grep jarvis
 
 ## Troubleshooting
 
-If the daemon isn't running as expected:
-1. Check the error logs at `/tmp/jarvis.err`
-2. Verify the Python script path in the plist file matches your actual script location
-3. Confirm the Python interpreter path is correct (verify with `which python3`)
-4. Ensure you have write permissions to the `/tmp` directory
-
+If JARVIS isn't working as expected:
+1. Check the error logs at `/logs/jarvis.err`
+2. Verify your microphone is properly connected and has necessary permissions
+3. Ensure all dependencies are installed correctly
+4. Check if the Python script path in the plist file matches your actual script location
+5. Confirm the Python interpreter path is correct (verify with `which python3`)
+6. Ensure you have write permissions to the `/tmp` directory
 
 ## Running the app
 
