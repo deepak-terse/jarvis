@@ -22,7 +22,7 @@ def main():
         try:
             audio = listen()
             text = transcribe(audio)
-
+            respond(text)
             logging.info(f"User said: {text}")
 
             if text.lower() in ("exit", "quit", "stop"):

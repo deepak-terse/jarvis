@@ -17,6 +17,14 @@ A voice-interactive Python assistant that listens to your commands and responds 
 - pyttsx3
 - PyAudio
 
+
+## Install dependencies
+This only installs imported dependencies and accordingly update the requirements.txt
+```bash
+pip install pipreqs
+pipreqs . --force
+```
+
 ## Setup Instructions
 
 1. Create a virtual environment and install dependencies:
@@ -107,3 +115,4 @@ If JARVIS isn't working as expected:
 
 - Using `launchctl` (as mentioned above)
 - Using `python3 src/main.py`
+
