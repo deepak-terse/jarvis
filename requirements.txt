@@ -1,3 +1,4 @@
+scipy==1.15.3
+sounddevice==0.5.2
 SpeechRecognition==3.10.0
-pyttsx3==2.90
-PyAudio==0.2.13
+tts==0.20.1
