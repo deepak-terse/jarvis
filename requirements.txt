@@ -1,4 +1,4 @@
-scipy==1.15.3
+scipy
 sounddevice==0.5.2
-SpeechRecognition==3.10.0
-tts==0.20.1
+SpeechRecognition
+tts

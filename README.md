@@ -10,6 +10,14 @@ A voice-interactive Python assistant that listens to your commands and responds 
 - 🔄 Continuous listening mode
 - 📝 Command logging
 
+## Experimentation
+
+All experimental work, prototypes, and research related to JARVIS is maintained in a separate repository: [py-toolkit](https://github.com/deepak-terse/py-toolkit). This includes:
+- RAG implementations
+- Dialogue system experiments
+- Voice processing prototypes
+- Other AI assistant approaches
+
 ## Dependencies
 
 - Python 3.x
