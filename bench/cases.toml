@@ -1,0 +1,319 @@
+# Tool-choice benchmark: `jarvis bench` (first decision only) or `jarvis bench --live` (full turns).
+# `expect` is the tool the model should call first: a name, a list of acceptable names, or omitted
+# for "answer directly". `category` groups the per-category report.
+
+# ── news ──
+[[case]]
+category = "news_search"
+prompt = "What's the latest on the CJP protest in India?"
+expect = "web_search"
+
+[[case]]
+category = "news_search"
+prompt = "Tell me about the CJP protest."
+expect = "web_search"
+
+[[case]]
+category = "news_search"
+prompt = "Is there a farmers' protest in Delhi right now?"
+expect = "web_search"
+
+[[case]]
+category = "news"
+prompt = "What's the news today?"
+expect = "news"
+
+[[case]]
+category = "news"
+prompt = "Any tech news?"
+expect = "news"
+
+[[case]]
+category = "news"
+prompt = "Give me the latest business headlines."
+expect = "news"
+
+[[case]]
+category = "news"
+prompt = "What's happening in the world right now?"
+expect = "news"
+
+[[case]]
+category = "news"
+prompt = "Any sports news today?"
+expect = "news"
+
+[[case]]
+category = "news"
+prompt = "Why did the stock market fall yesterday?"
+expect = ["web_search", "news"]
+
+# ── stocks ──
+[[case]]
+category = "stocks"
+prompt = "How's Reliance doing today?"
+expect = "stocks"
+
+[[case]]
+category = "stocks"
+prompt = "Where's Nifty right now?"
+expect = "stocks"
+
+[[case]]
+category = "stocks"
+prompt = "What's the Sensex at?"
+expect = "stocks"
+
+[[case]]
+category = "stocks"
+prompt = "What's the share price of Infosys?"
+expect = "stocks"
+
+[[case]]
+category = "stocks"
+prompt = "Is Tata Motors up or down today?"
+expect = "stocks"
+
+[[case]]
+category = "stocks"
+prompt = "How is Apple stock doing?"
+expect = "stocks"
+
+# ── currency ──
+[[case]]
+category = "currency"
+prompt = "How much is 100 dollars in rupees?"
+expect = "currency"
+
+[[case]]
+category = "currency"
+prompt = "What's the euro to rupee rate?"
+expect = "currency"
+
+[[case]]
+category = "currency"
+prompt = "Convert 250 pounds to dollars."
+expect = "currency"
+
+[[case]]
+category = "currency"
+prompt = "How many yen for 5000 rupees?"
+expect = "currency"
+
+# ── knowledge ──
+[[case]]
+category = "knowledge"
+prompt = "Who is Ratan Tata?"
+expect = "knowledge"
+
+[[case]]
+category = "knowledge"
+prompt = "What is the Chandrayaan programme?"
+expect = "knowledge"
+
+[[case]]
+category = "knowledge"
+prompt = "Tell me about the Konark Sun Temple."
+expect = "knowledge"
+
+[[case]]
+category = "knowledge"
+prompt = "Who was APJ Abdul Kalam?"
+expect = "knowledge"
+
+[[case]]
+category = "knowledge"
+prompt = "What is quantum entanglement?"
+expect = ["knowledge", ""]
+
+[[case]]
+category = "knowledge"
+prompt = "What is the Infosys company?"
+expect = "knowledge"
+
+# ── today ──
+[[case]]
+category = "today"
+prompt = "What's special about today?"
+expect = "about_today"
+
+[[case]]
+category = "today"
+prompt = "Is there any festival today?"
+expect = "web_search"
+
+[[case]]
+category = "today"
+prompt = "When is Diwali this year?"
+expect = "web_search"
+
+[[case]]
+category = "today"
+prompt = "What happened on this day in history?"
+expect = "about_today"
+
+[[case]]
+category = "today"
+prompt = "Is tomorrow a holiday?"
+expect = "web_search"
+
+# ── search (fallback territory) ──
+[[case]]
+category = "weather"
+prompt = "What's the weather outside?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "Is it going to rain tomorrow?"
+expect = "weather"
+
+[[case]]
+category = "search"
+prompt = "Who won the last Formula 1 race?"
+expect = "web_search"
+
+[[case]]
+category = "search"
+prompt = "What's the score in the India cricket match?"
+expect = ["web_search", "news"]
+
+[[case]]
+category = "search"
+prompt = "What's the latest iPhone model?"
+expect = "web_search"
+
+[[case]]
+category = "search"
+prompt = "What time does the Mumbai metro start running?"
+expect = "web_search"
+
+[[case]]
+category = "search"
+prompt = "What's the petrol price in Mumbai today?"
+expect = "web_search"
+
+[[case]]
+category = "search"
+prompt = "When is the next RBI policy meeting?"
+expect = "web_search"
+
+[[case]]
+category = "search"
+prompt = "Why is the rupee falling?"
+expect = "web_search"
+
+# ── direct (no lookup) ──
+[[case]]
+category = "direct"
+prompt = "What time is it?"
+
+[[case]]
+category = "direct"
+prompt = "What's today's date?"
+
+[[case]]
+category = "direct"
+prompt = "What day of the week is it?"
+
+[[case]]
+category = "direct"
+prompt = "What is 17 times 23?"
+
+[[case]]
+category = "direct"
+prompt = "Convert 5 kilometres to miles."
+
+[[case]]
+category = "direct"
+prompt = "How many grams in a pound?"
+
+[[case]]
+category = "direct"
+prompt = "What's 18 percent of 2500?"
+
+[[case]]
+category = "direct"
+prompt = "Convert 30 degrees Celsius to Fahrenheit."
+
+# ── chat (no lookup) ──
+[[case]]
+category = "chat"
+prompt = "Tell me a joke."
+
+[[case]]
+category = "chat"
+prompt = "Hey, how are you doing?"
+
+[[case]]
+category = "chat"
+prompt = "Explain what a black hole is in one sentence."
+expect = ["", "knowledge"]
+
+[[case]]
+category = "chat"
+prompt = "Thanks, that's all."
+
+[[case]]
+category = "chat"
+prompt = "Give me a good name for a cat."
+
+[[case]]
+category = "chat"
+prompt = "Write a two-line poem about the monsoon."
+
+# Weather routing. Use --live to also inspect scope, brevity, and timings.
+[[case]]
+category = "weather"
+prompt = "Will it rain tonight?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "How's this evening looking in Pune?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "What's the weather in London on Friday?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "Do I need an umbrella this weekend?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "Is it okay to go for a run outside?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "What's the air quality in Delhi?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "Is UV high in Pune tomorrow?"
+expect = "weather"
+
+[[case]]
+category = "weather"
+prompt = "What time is sunset in Tokyo?"
+expect = "weather"
+
+[[case]]
+category = "weather_edge"
+prompt = "What was the weather in Pune yesterday?"
+expect = "weather"
+
+[[case]]
+category = "weather_edge"
+prompt = "Will it rain in Pune 30 days from today?"
+expect = "weather"
+
+[[case]]
+category = "weather_edge"
+prompt = "What's the weather in Zzznotarealcity?"
+expect = "weather"

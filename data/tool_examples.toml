@@ -1,0 +1,114 @@
+# Teaches the local model when to call which tool. Small models follow examples far
+# better than descriptions: on `jarvis bench`, the demonstrations below raised tool
+# choice from 36/50 to 44/50 (knowledge questions from 1/6 to 6/6).
+#
+# Entries for a tool are used only by personas that list that tool. Re-run `jarvis bench`
+# after editing; keep it short, since everything here is part of every prompt (it's cached,
+# so the cost is a one-off ~100 ms per persona, not per turn).
+
+# ── Routes: one line each in the system prompt ──
+# `ask` is a phrase or a list of phrases; omit `tool` for things the model should answer directly.
+
+[[route]]
+ask = "who is Sachin Tendulkar"
+tool = "knowledge"
+arguments = { topic = "Sachin Tendulkar" }
+
+[[route]]
+ask = "what is the Taj Mahal"
+tool = "knowledge"
+arguments = { topic = "Taj Mahal" }
+
+[[route]]
+ask = "any business news"
+tool = "news"
+arguments = { category = "business" }
+
+[[route]]
+ask = "how is HDFC Bank doing"
+tool = "stocks"
+arguments = { company = "HDFC Bank" }
+
+[[route]]
+ask = "50 euros in rupees"
+tool = "currency"
+arguments = { amount = 50, from = "EUR" }
+
+[[route]]
+ask = "anything special today"
+tool = "about_today"
+
+[[route]]
+ask = ["will it be sunny this weekend", "will it rain this weekend"]
+tool = "weather"
+arguments = { when = "this weekend" }
+
+[[route]]
+ask = "who won the match last night"
+tool = "web_search"
+arguments = { query = "cricket match result last night", time_range = "day" }
+
+[[route]]
+ask = ["what's 15 times 4", "what time is it", "tell me a joke"]
+
+# ── Examples: full worked exchanges placed before every conversation ──
+
+[[route]]
+ask = ["what is the latest on the CJP protest in India", "tell me about the CJP protest"]
+tool = "web_search"
+arguments = { query = "CJP protest India latest news", topic = "news", time_range = "week" }
+
+[[example]]
+tool = "web_search"
+# Fictional story demonstrating a search-backed answer, not a real news report.
+user = "What's happening with the transport protest in Riverton?"
+arguments = { query = "transport protest Riverton latest news", topic = "news", time_range = "week" }
+result = "Sources: 1. Riverton transport protest: The city's traffic advisory says a transport workers' march is disrupting buses in the centre today."
+reply = "A transport workers' march is disrupting buses in central Riverton today, according to the city's traffic advisory."
+
+[[example]]
+tool = "knowledge"
+user = "Who is Sachin Tendulkar?"
+arguments = { topic = "Sachin Tendulkar" }
+result = """
+Source: Wikipedia, article "Sachin Tendulkar" (Indian cricketer (born 1973)).
+Sachin Ramesh Tendulkar is an Indian former international cricketer who captained the Indian national team. \
+He is widely regarded as one of the greatest batsmen in the history of cricket."""
+reply = "Sachin Tendulkar is a former Indian cricket captain, widely regarded as one of the greatest batsmen of all time, according to Wikipedia."
+
+[[example]]
+tool = "weather"
+user = "Will it rain tonight?"
+arguments = { when = "tonight", metric = "rain" }
+result = '{"status":"ok","place":{"city":"Mumbai","country":"India","timezone":"Asia/Kolkata"},"as_of":"2026-10-23 17:45","window":{"start":"2026-10-23 18:00","end":"2026-10-24 06:00"},"metrics":{"rain_chance_percent":{"min":10,"max":70}},"rain_hours":[{"local_time":"2026-10-23 21:00","chance_percent":70}]}'
+reply = "Take an umbrella if you're heading out tonight in Mumbai: rain is most likely around nine, with a seventy percent chance. That's as of five forty-five this evening."
+
+[[route]]
+ask = ["what's the weather", "is it hot outside", "okay to go for a run"]
+tool = "weather"
+arguments = {}
+
+[[route]]
+ask = ["do I need an umbrella tonight", "will it rain tonight"]
+tool = "weather"
+arguments = { when = "tonight", metric = "rain" }
+
+[[route]]
+ask = "air quality in Delhi"
+tool = "weather"
+arguments = { location = "Delhi, India", metric = "air_quality" }
+
+[[route]]
+ask = "weather yesterday"
+tool = "weather"
+arguments = { when = "yesterday" }
+
+[[route]]
+ask = "weather on a date beyond forecast range"
+tool = "weather"
+arguments = { when = "2099-01-01" }
+
+[[route]]
+ask = "is there any festival today"
+tool = "web_search"
+arguments = { query = "festivals and public holidays India today" }

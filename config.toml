@@ -1,0 +1,147 @@
+[llm]
+model        = "~/models/qwen-4b-q4.gguf"
+template     = "qwen"          # chat template + tool-call parser ("qwen", or "qwen3" for hybrid-thinking models)
+context_size = 8192
+gpu_layers   = 99
+flash_attn   = true
+keep_warm    = true            # false: load on demand, release after each turn
+max_tokens   = 1024
+
+[persona]
+default = "jarvis"
+dir     = "personas"           # relative to this file
+tool_examples = "data/tool_examples.toml"   # when-to-call-which-tool examples (tuned with `jarvis bench`)
+
+[session]
+history_messages = 20          # sliding window of past user/assistant messages
+
+[capabilities.stt]
+provider = "whisper"           # sherpa-onnx Whisper (ONNX)
+model    = "~/models/whisper/sherpa-onnx-whisper-base.en"
+
+[capabilities.tts]
+provider  = "kokoro"
+model_dir = "~/models/kokoro"
+
+# ── Live data skills ──────────────────────────────────────────────────────────
+# Every [skills.<name>] section also accepts these shared keys (built-in defaults per skill):
+#   enabled        = true          false: skill is not loaded at all
+#   timeout_secs   = 8             give up after this long
+#   cache_ttl_secs = 0             reuse answers for identical arguments this long (0: off)
+#   fallback       = true          on failure/timeout, answer with web_search instead
+#   description    = "..."         override the tool description the model sees
+# API keys are read from the environment variables named here, never stored in this file.
+
+[skills.web_search]
+enabled        = true
+provider       = "tavily"
+api_key_env    = "TAVILY_API_KEY"
+search_depth   = "basic"         # basic | fast | ultra-fast (1 credit), advanced (2 credits)
+topic          = "general"       # default topic: general | news | finance (the model can override per query)
+max_results    = 3               # fewer, shorter snippets keep the local prompt small and fast
+include_answer = true            # Tavily's short summary, placed above the snippets
+# country      = "india"         # boost local results; defaults to profile country/location, "" disables
+timeout_secs   = 10
+cache_ttl_secs = 300
+
+[skills.news]
+enabled           = true
+default_category  = "top"
+refresh_mins      = 15            # background refresh; questions are answered from memory
+max_headlines     = 5
+max_age_hours     = 36            # ignore older stories
+stale_after_hours = 48            # warn in logs when a feed's newest item is older
+region            = "India"       # used in fallback web searches
+# Add, remove or rename categories freely; the model sees the category list automatically.
+# A feed is a URL, or { url = "...", name = "Source name" } to override the spoken source name.
+[skills.news.categories]
+top = [
+  { url = "https://timesofindia.indiatimes.com/rssfeedstopstories.cms", name = "Times of India" },
+  { url = "https://www.thehindu.com/news/national/feeder/default.rss", name = "The Hindu" },
+  { url = "https://indianexpress.com/section/india/feed/", name = "Indian Express" },
+]
+world = [
+  { url = "https://feeds.bbci.co.uk/news/world/rss.xml", name = "BBC News" },
+  { url = "https://www.aljazeera.com/xml/rss/all.xml", name = "Al Jazeera" },
+]
+business = [
+  { url = "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms", name = "Economic Times" },
+  { url = "https://www.livemint.com/rss/markets", name = "Mint" },
+  { url = "https://www.thehindu.com/business/feeder/default.rss", name = "The Hindu" },
+]
+tech = [
+  { url = "https://feeds.feedburner.com/gadgets360-latest", name = "Gadgets 360" },
+  { url = "https://techcrunch.com/feed/", name = "TechCrunch" },
+  { url = "https://www.theverge.com/rss/index.xml", name = "The Verge" },
+]
+sports = [
+  { url = "https://www.thehindu.com/sport/feeder/default.rss", name = "The Hindu" },
+  { url = "https://feeds.bbci.co.uk/sport/rss.xml", name = "BBC Sport" },
+]
+
+[skills.knowledge]
+enabled        = true
+language       = "en"             # Wikipedia edition
+max_sentences  = 3
+timeout_secs   = 5
+cache_ttl_secs = 86400
+
+[skills.about_today]
+enabled             = true
+max_events          = 3                  # historical events from Wikipedia "On this day"
+events_timeout_secs = 4                  # Wikipedia request deadline
+timeout_secs        = 6
+
+[skills.stocks]
+enabled        = true
+api_key_env    = "TWELVE_DATA_API_KEY"
+exchanges      = ["NSE", "BSE"]   # preferred exchanges, best first
+any_exchange   = true             # allow other exchanges when no preferred listing matches (e.g. Apple)
+timeout_secs   = 6
+cache_ttl_secs = 60
+# Spoken name → SYMBOL or SYMBOL:EXCHANGE, checked before searching. Indices must be listed here:
+# Twelve Data's symbol search doesn't return them (full list: api.twelvedata.com/indices?country=India).
+# Names resolved by search are remembered in <storage>/skills/stock_symbols.toml.
+[skills.stocks.aliases]
+nifty          = "NSEI:NSE"
+"nifty 50"     = "NSEI:NSE"
+"bank nifty"   = "NSEBANK:NSE"
+"nifty bank"   = "NSEBANK:NSE"
+"nifty it"     = "CNXIT:NSE"
+"nifty midcap" = "CRSMID:NSE"
+sensex         = "BSESN:BSE"
+
+[skills.currency]
+enabled        = true
+api_key_env    = "TWELVE_DATA_API_KEY"
+home_currency  = "INR"            # target when the user doesn't name one
+timeout_secs   = 5
+cache_ttl_secs = 600
+
+[skills.weather]
+enabled = true
+api_key_env = "WEATHER_API_KEY"
+forecast_days = 3                 # Free: 3; Starter: 7; use only what your plan supports (max 14)
+units = "metric"                 # profile units or tool argument can override: metric | imperial
+timeout_secs = 6
+cache_ttl_secs = 0                # re-evaluate destination time windows each call
+bundle_cache_ttl_secs = 600       # reuse complete provider bundle across follow-up questions
+fallback = true
+[skills.weather.thresholds]
+rain_chance = 50                  # percent, hourly
+feels_like_c = 35
+us_epa_category = 3               # 1–6 categories; NOT India's AQI or a 0–500 AQI number
+uv = 6
+heavy_rain_mm_per_hour = 7.5
+# Optional city overrides; omitted fields use built-in defaults:
+# [skills.weather.city_thresholds.Mumbai]
+# feels_like_c = 38
+# rain_chance = 60
+
+[greeting]
+enabled       = false             # opt in to a startup briefing: historical event, headlines and weather flags
+headlines     = 3
+news_category = "top"
+
+[storage]
+dir = "~/jarvis/storage"

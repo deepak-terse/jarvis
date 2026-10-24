@@ -1,0 +1,33 @@
+[package]
+name = "jarvis"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1"
+async-trait = "0.1"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+chrono-tz = "0.10"
+clap = { version = "4", features = ["derive", "env"] }
+cpal = "0.16"
+crossterm = "0.29"
+dotenvy = "0.15"
+feed-rs = "3.0.0"
+llama-cpp-2 = { version = "=0.1.160", features = ["metal"] }
+llama-cpp-sys-2 = "=0.1.160"   # flash-attention enum only
+regex = "1"
+reqwest = { version = "0.13", features = ["json", "query"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sherpa-onnx = "=1.13.8"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "io-std", "io-util", "sync", "time"] }
+toml = "0.9"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Native deps (llama.cpp, onnxruntime glue) are slow unoptimised; keep them fast in dev builds.
+[profile.dev.package."*"]
+opt-level = 3
+
+[dev-dependencies]
+tempfile = "3.27.0"

@@ -1,0 +1,6 @@
+/target
+/storage
+*.gguf
+.env
+.env.*
+!.env.example
