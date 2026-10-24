@@ -1,8 +1,6 @@
-//! The agent loop and the voice pipeline. Depends only on traits.
+//! The brain (`agent`) and the contracts everything else plugs into (`contracts`).
+//! The agent depends only on contracts; models, skills, memory, capabilities and
+//! channels implement or consume them without the agent knowing which ones exist.
 
 pub mod agent;
-pub mod examples;
-pub mod greeting;
-pub mod prompt;
-pub mod session;
-pub mod voice;
+pub mod contracts;

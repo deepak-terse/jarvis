@@ -1,5 +1,6 @@
-//! Capabilities are named by function (`stt`, `tts`, later `vad`, `vision`).
-//! Each has a trait plus compiled-in providers chosen by `[capabilities.<name>] provider`.
+//! Capability slots, named by function (`stt`, `tts`, later `vad`, `vision`).
+//! The traits live in `core::contracts::capabilities`; each slot picks an adapter by
+//! `[capabilities.<name>] provider` and holds it according to `keep_warm`.
 
 pub mod stt;
 pub mod tts;
